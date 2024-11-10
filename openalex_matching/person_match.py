@@ -1,12 +1,9 @@
 import requests
 import pandas as pd
 from tqdm.notebook import tqdm
-import seaborn as sns
-import matplotlib.pyplot as plt
-from fuzzywuzzy import fuzz #Install this package via pip install fuzzywuzzy
+from fuzzywuzzy import fuzz 
 from nicknames import NickNamer
 from collections import defaultdict
-from requests.exceptions import ChunkedEncodingError
 import time
 from .search_py import SearchType
 

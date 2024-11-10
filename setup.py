@@ -5,24 +5,23 @@ setup(
     version = "0.1",  
     author="Bryan Yuk", 
     author_email= "dzg5cg@virginia.edu",  
-    description="A Python package for matching people with their OpenAlex ID using OpenAlex data",  
-    long_description= open('README.md').read(),  # Long description (usually from README)
-    long_description_content_type='text/markdown',  # Format of the long description (Markdown)
-    url="https://github.com/byuk729/openalex_matching",  # URL of your project (GitHub, etc.)
-    packages=find_packages(),  # Automatically find all packages in your directory
+    license = "MIT",
+    long_description= open('README.md').read(),
+    long_description_content_type='text/markdown', 
+    url="https://github.com/byuk729/openalex_matching",  
+    packages=find_packages(),  
     install_requires=[
-        "requests",  # List of dependencies
+        "requests",  
         "pandas",
         "tqdm",
-        "seaborn",
-        "matplotlib",
         "fuzzywuzzy",
         "nicknames"
     ],
     classifiers=[
-        "Programming Language :: Python :: 3",  # Supported Python versions
-        "License :: OSI Approved :: MIT License",  # License type
-        "Operating System :: OS Independent",
+        "Programming Language :: Python :: 3",  
+        "License :: OSI Approved :: MIT License",  
+        "Intended Audience :: Science/Research",
+        "Topic :: Scientific/Engineering :: Information Analysis"
     ],
-    python_requires='>=3.6',  # Minimum Python version required
+    python_requires='>=3.8',  # Minimum Python version required
 )
