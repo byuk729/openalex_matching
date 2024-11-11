@@ -6,7 +6,7 @@ import time
 
 def topic_id_openAlex(topicName):
 
-    if not topicName.isalpha():
+    if not topicName.replace(" ", "").isalpha():
         raise ValueError("topic name can only include alphabetic characters")
     
     url = f"https://api.openalex.org/topics?search={topicName}"
