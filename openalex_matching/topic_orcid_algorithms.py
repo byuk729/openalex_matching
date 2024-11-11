@@ -35,7 +35,6 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
     nn = NickNamer()
     first, last = nameParser(person_name)
     totalNames = {first} | set(nn.nicknames_of(first)) | set(nn.canonicals_of(first))
-    print(totalNames)
     ids = []
     
     def search_with_name(name):
@@ -53,7 +52,6 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
                 filtered_ids = []
                 for result in data['results']:
                     author_concepts = [concept['id'].split('/')[-1] for concept in result.get('topics', [])]
-                    print(author_concepts)
                     if topicID in author_concepts:
                         filtered_ids.append(result['id'].split('/')[-1])  # Extract OpenAlex ID
                 
