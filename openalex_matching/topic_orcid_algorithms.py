@@ -83,15 +83,15 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
     return ids
 
 def search_orcid_ID(id):
-     
+
      url = f'https://api.openalex.org/authors?filter=orcid:{id}'
      response = requests.get(url)
      data = response.json()
+      
+     if len(data.get('results' , [])) == 0:
+        print("No author found for orcid id")
+        return None
 
-     if len(data.get(['results'] , [])) == 0:
-         print("No author found for orcid id")
-         return None
-    
      return data['results'][0]['display_name']
 
      
