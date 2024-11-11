@@ -10,6 +10,7 @@ setup(
     long_description_content_type='text/markdown', 
     url="https://github.com/byuk729/openalex_matching",  
     packages=find_packages(),  
+    package_dir={"": "src"},
     install_requires=[
         "requests",  
         "pandas",
