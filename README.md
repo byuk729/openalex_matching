@@ -20,15 +20,12 @@ pip install git+https://github.com/byuk729/openalex_matching
 
 
 ## Examples
-In the examples folder, you'll find two Jupyter notebooks. The first, titled OpenAlex_person_match_v1, demonstrates how to use the matching algorithms, including functionality for working with CSV files. The second notebook, orcid_topic_algorithms, showcases how to use the ORCID and topic search algorithms. You can run these notebooks to explore and better understand how the package works. 
 
-### Person Matching Example:
+### OpenAlex_person_match_v1 Example:
 Demonstrates how to match single author to their corresponding OpenAlex ID 
-
-### Person Matching Example with CSV:
 Shows how to read from a CSV file, run the matching algorithm, and output the OpenAlex IDs for each author into a new CSV file.
 
-### ORCID and Topic Examples:
+### orcid_topic_algorithms Example:
 Demonstrates how to match authors using ORCID to OpenAlex ID, as well as how to filter authors based on name, institution, and research topics.
 
 
