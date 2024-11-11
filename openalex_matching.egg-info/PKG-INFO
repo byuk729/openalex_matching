@@ -1,3 +1,22 @@
+Metadata-Version: 2.1
+Name: openalex_matching
+Version: 0.1
+Home-page: https://github.com/byuk729/openalex_matching
+Author: Bryan Yuk
+Author-email: dzg5cg@virginia.edu
+License: MIT
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Requires-Dist: requests
+Requires-Dist: pandas
+Requires-Dist: tqdm
+Requires-Dist: fuzzywuzzy
+Requires-Dist: nicknames
+
 # OpenAlex Matching
 
 ## Description
