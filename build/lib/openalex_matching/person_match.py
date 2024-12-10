@@ -66,7 +66,7 @@ def list_person_ids_openalex(person_name, university_id):
     """
     Input
       person_name: the name of a person
-      
+      university_id: openalex university ID
     Output
       person_ids: a list of openalex ids matched
     """
@@ -103,20 +103,25 @@ def list_person_ids_openalex(person_name, university_id):
         return []
 
     ids.extend(search_with_name(first))
+
     # First, search with all names in totalNames
     if not ids:
         for firstName in totalNames:
             ids.extend(search_with_name(firstName))
+            #If the nickname search returns results, update the first name to the best matching name. 
             if ids:
                 bestNameMatch = firstName
                 break
         person_name = f"{bestNameMatch} {last}"
+
     # If no results found, search with initial
     if not ids:
+        #Try searching with first middle initial
         if len(first) == 2:
             initials = first[0] + ".%20" + first[1] + "."
             ids.extend(search_with_name(initials))
             typeOfSearchConducted = SearchType.FIRST_MIDDLE_INITIAL
+        #Try searching with first initial
         else:
             initial = first[0] + "."
             ids.extend(search_with_name(initial))
@@ -128,11 +133,12 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
     
     Input
       person_name: the name of a person
-      person_ids: assoicated ids with a person (can be found with person_ids_alexa)
-      university_id: university id for wh oyo
+      person_ids: assoicated ids with a person (can be found with list_persons_ids_openalex)
+      university_id: university id 
+      typeOfSearchConducted: enumerated type representing type of name search conducted
       
     Output
-      person_ids: a list of openalex ids matched
+      selectID: best openalex id match for author name
 
 
     '''
@@ -142,6 +148,8 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
     firstName, lastName = nameParser(person_name)
     maxNameSimilarity = 0
     highThres, lowThres = 76, 65
+
+    #Iterate through list of ids
     for id in person_ids:
         url = f'https://api.openalex.org/people/{id}'
         trycnt = 3
@@ -156,16 +164,19 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
                 data = response.json()
                 affiliations = data.get('affiliations', [])
                 institution_ids = [aff['institution']['id'].split('/')[-1] for aff in affiliations]
+
                 # Proceed only if the specified university_id is in the list of institution_ids
                 if university_id not in institution_ids:
                     break
                 
                 filtered_persons_ids.append(id)
 
+                #Calculating fuzz ratio between the input name and the API name of id.
                 apiFirstName, apiLastName = nameParser(data['display_name'])
                 apiDisplayName = apiFirstName + " " + apiLastName
                 name_similarity = fuzz.ratio(person_name, apiDisplayName)
 
+                #Change fuzz string matching threshold based on search type
                 if (typeOfSearchConducted == SearchType.FIRST_INITIAL):
                     threshold = highThres
                 elif (typeOfSearchConducted == SearchType.EXACT_NAME):
@@ -173,6 +184,7 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
                 else:
                     threshold = 0
                 
+                #Filtering name based on fuzz score 
                 if name_similarity >= threshold:
                     if (typeOfSearchConducted == SearchType.FIRST_INITIAL or typeOfSearchConducted == SearchType.FIRST_MIDDLE_INITIAL):
                         if (firstName[0].lower() != apiFirstName[0].lower()):
@@ -182,6 +194,7 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
                         maxNameSimilarity = name_similarity
                         maxCiteCount = data['cited_by_count']
                         selectID = id
+                    #If scores are equal, sort by author with most citations
                     elif name_similarity == maxNameSimilarity:
                         if data['cited_by_count'] > maxCiteCount:
                             maxCiteCount = data['cited_by_count']
@@ -193,11 +206,11 @@ def choose_person(person_ids, person_name, university_id, typeOfSearchConducted)
 
             except (ConnectionResetError, ConnectionError) as ex:
                 if trycnt <= 1:
-                    print(f"Failed to retrieve: {url}\n{str(ex)}")  # Done retrying
+                    print(f"Failed to retrieve: {url}\n{str(ex)}")  
                 else:
                     print(f"Retrying... ({3 - trycnt + 1}/3)")
-                    trycnt -= 1  # Decrement retry counter
-                    time.sleep(0.5)  # Wait half a second before retrying
+                    trycnt -= 1 
+                    time.sleep(0.5)  
 
     return selectID
    

@@ -4,9 +4,10 @@ from .person_match import nameParser
 import time
 
 
+#Returns topic id based on topic name
 def topic_id_openAlex(topicName):
 
-    if not topicName.isAlpha():
+    if not topicName.replace(" ", "").isalpha():
         raise ValueError("topic name can only include alphabetic characters")
     
     url = f"https://api.openalex.org/topics?search={topicName}"
@@ -28,14 +29,15 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
     """
     Input
       person_name: the name of a person
+      university_id: openalex university id
+      topicID: openalex topic id
       
     Output
-      person_ids: a list of openalex ids matched
+      person_ids: a list of openalex ids matched based on filters
     """
     nn = NickNamer()
     first, last = nameParser(person_name)
     totalNames = {first} | set(nn.nicknames_of(first)) | set(nn.canonicals_of(first))
-    print(totalNames)
     ids = []
     
     def search_with_name(name):
@@ -53,20 +55,18 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
                 filtered_ids = []
                 for result in data['results']:
                     author_concepts = [concept['id'].split('/')[-1] for concept in result.get('topics', [])]
-                    print(author_concepts)
                     if topicID in author_concepts:
-                        filtered_ids.append(result['id'].split('/')[-1])  # Extract OpenAlex ID
+                        filtered_ids.append(result['id'].split('/')[-1])  
                 
                 return filtered_ids
                 
             except (ConnectionError, ConnectionResetError) as ex:
                 if trycnt <= 1:
-                    print(f"Failed to retrieve: {url}\n{str(ex)}")  # Done retrying
+                    print(f"Failed to retrieve: {url}\n{str(ex)}")  
                 else:
                     print(f"Retrying... ({3 - trycnt + 1}/3)")
-                    trycnt -= 1  # Decrement retry counter
-                    time.sleep(0.5)  # Wait half a second before retrying
-        return []
+                    trycnt -= 1  
+                    time.sleep(0.5)  
 
     # First, search with all names in totalNames
     for firstName in totalNames:
@@ -82,16 +82,17 @@ def list_person_ids_openalex_by_topic(person_name, university_id, topicID):
             ids.extend(search_with_name(initial))
     return ids
 
+#Returns openalex id based on orcid id
 def search_orcid_ID(id):
-     
+
      url = f'https://api.openalex.org/authors?filter=orcid:{id}'
      response = requests.get(url)
      data = response.json()
+      
+     if len(data.get('results' , [])) == 0:
+        print("No author found for orcid id")
+        return None
 
-     if len(data.get(['results'] , [])) == 0:
-         print("No author found for orcid id")
-         return None
-    
      return data['results'][0]['display_name']
 
      

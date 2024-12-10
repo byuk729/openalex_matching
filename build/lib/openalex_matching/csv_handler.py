@@ -1,17 +1,17 @@
 import pandas as pd
 
-def name_csv_reader(inputFileName):
+def name_csv_reader(inputFileName, columnName):
     try:
         if not inputFileName.lower().endswith(".csv"):
             raise ValueError("Invalid input file format, only csv files are acceptable")
         
         df = pd.read_csv(inputFileName)
 
-        # Check if 'Names' column exists
-        if 'Names' in df.columns:
-            namesArray = df['Names'].to_numpy()
+        # Check if inputted column exists
+        if columnName in df.columns:
+            namesArray = df[columnName].to_numpy()
         else:
-            raise ValueError("'Names' column not found in input CSV file")
+            raise ValueError(columnName + "column not found in input CSV file")
         
         return namesArray
     
