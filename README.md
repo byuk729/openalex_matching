@@ -8,7 +8,7 @@ OpenAlex Matching is a Python package designed to match research authors with th
 You can install OpenAlex Matching via pip:
 
 ```bash
-pip install openalex-matching == 0.3
+pip install "openalex-matching == 0.4"
 
 ```
 Alternatively, you can install from GitHub

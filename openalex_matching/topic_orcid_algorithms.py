@@ -93,6 +93,9 @@ def search_orcid_ID(id):
         print("No author found for orcid id")
         return None
 
-     return data['results'][0]['display_name']
+     openalex_id = data['results'][0]['ids']["openalex"]
+     openalex_id = openalex_id.split("/")[-1]
+
+     return openalex_id
 
      
