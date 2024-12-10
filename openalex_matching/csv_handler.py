@@ -7,7 +7,7 @@ def name_csv_reader(inputFileName, columnName):
         
         df = pd.read_csv(inputFileName)
 
-        # Check if inputted column exists
+        # Check if inputted column already exists
         if columnName in df.columns:
             namesArray = df[columnName].to_numpy()
         else:

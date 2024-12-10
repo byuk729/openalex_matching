@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name= "openalex_matching",  
-    version = "0.2",  
+    version = "0.3",  
     author="Bryan Yuk", 
     author_email= "dzg5cg@virginia.edu",  
     license = "MIT",
