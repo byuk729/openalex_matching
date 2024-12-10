@@ -89,11 +89,15 @@ def search_orcid_ID(id):
      response = requests.get(url)
      data = response.json()
       
-     if len(data.get('results' , [])) == 0:
+     if not data.get('results'):
         print("No author found for orcid id")
         return None
 
      openalex_id = data['results'][0]['ids']["openalex"]
+     if not openalex_id:
+        print("OpenAlex ID not found in the response.")
+        return None
+     
      openalex_id = openalex_id.split("/")[-1]
 
      return openalex_id
